@@ -17,7 +17,18 @@ var COLORS = ["red", "blue", "green"];
  * @returns {[][]string} Grid array with the implemented flood fill algorithm
  */
 function floodFillAt(grid, x, y, color) {
-  // TODO
+  grid.forEach((column, columnIndex) => {
+    if (columnIndex >= x - 1 && columnIndex <= x + 1) {
+      column.forEach((cell, indexCell) => {
+        if (indexCell <= y + 1 && indexCell >= y - 1 && cell !== color) {
+          cell = color;
+          return (column[indexCell] = color);
+        }
+      });
+    }
+    return column;
+  });
+  return grid;
 }
 
 /**
@@ -50,4 +61,4 @@ function generateRandomGrid(rows, columns) {
   return grid;
 }
 
-export { floodFillAt, generateRandomGrid };
+export { floodFillAt, generateRandomGrid, COLORS };
