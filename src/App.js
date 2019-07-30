@@ -3,7 +3,6 @@ import styled from "styled-components";
 import "./App.css";
 
 import { floodFillAt, generateRandomGrid } from "./utils";
-import { updateExpression } from "@babel/types";
 
 const Cell = styled.button(props => ({
   background: props.background,
@@ -20,22 +19,31 @@ class App extends Component {
   state = { grid: [], selectedColor: "red" };
 
   componentDidMount() {
-    const grid = generateRandomGrid(8, 8);
+    const grid = generateRandomGrid(2, 10);
     this.setState({ grid });
   }
 
-  handleSelectColor = event => {
-    debugger;
-    this.setState({ selectedColor: event.target.value });
-  };
-
   handleColorChange = (x, y) => {
     const { grid, selectedColor } = this.state;
-    console.log(x, y, grid[x][y], selectedColor);
-    const updatedGrid = grid;
-    updatedGrid[x][y] = selectedColor;
-    console.log(updatedGrid);
-    this.setState({ grid: updatedGrid });
+
+    grid.forEach((column, index) => {
+      if (index >= x - 1 && index <= x + 1) {
+        column.forEach((cell, indexCell) => {
+          if (
+            indexCell <= y + 1 &&
+            indexCell >= y - 1 &&
+            cell !== selectedColor
+          ) {
+            cell = selectedColor;
+
+            return (column[indexCell] = selectedColor);
+          }
+        });
+      }
+      return column;
+    });
+
+    this.setState({ grid });
   };
 
   render() {
@@ -57,8 +65,10 @@ class App extends Component {
 
     return (
       <div className="App">
-        <select value={selectedColor} onChange={e => this.handleSelectColor(e)}>
-          >
+        <select
+          value={selectedColor}
+          onChange={e => this.setState({ selectedColor: e.target.value })}
+        >
           <option value="blue">Blue</option>
           <option value="green">Green</option>
           <option value="red">Red</option>
