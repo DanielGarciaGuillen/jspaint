@@ -109,7 +109,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const grid = generateRandomGrid(20, 20);
+    const grid = generateRandomGrid(15, 15);
     this.setState({ grid });
   }
 

@@ -17,17 +17,34 @@ var COLORS = ["red", "blue", "green"];
  * @returns {[][]string} Grid array with the implemented flood fill algorithm
  */
 function floodFillAt(grid, x, y, color) {
-  grid.forEach((column, columnIndex) => {
-    if (columnIndex >= x - 1 && columnIndex <= x + 1) {
-      column.forEach((cell, indexCell) => {
-        if (indexCell <= y + 1 && indexCell >= y - 1 && cell !== color) {
-          cell = color;
-          return (column[indexCell] = color);
+  const colorToMatch = grid[x][y];
+  const pixelsToCheck = [x, y];
+
+  if (grid[x][y] !== color) {
+    while (pixelsToCheck.length > 0) {
+      const yIndex = pixelsToCheck.pop();
+      const xIndex = pixelsToCheck.pop();
+      if (
+        yIndex >= 0 &&
+        yIndex <= grid[0].length - 1 &&
+        xIndex >= 0 &&
+        xIndex <= grid.length - 1
+      ) {
+        const squareColor = grid[xIndex][yIndex];
+        if (squareColor === colorToMatch) {
+          grid[xIndex][yIndex] = color;
+          pixelsToCheck.push(xIndex - 1, yIndex - 1);
+          pixelsToCheck.push(xIndex - 1, yIndex);
+          pixelsToCheck.push(xIndex - 1, yIndex + 1);
+          pixelsToCheck.push(xIndex, yIndex - 1);
+          pixelsToCheck.push(xIndex, yIndex + 1);
+          pixelsToCheck.push(xIndex + 1, yIndex - 1);
+          pixelsToCheck.push(xIndex + 1, yIndex);
+          pixelsToCheck.push(xIndex + 1, yIndex + 1);
         }
-      });
+      }
     }
-    return column;
-  });
+  }
   return grid;
 }
 
